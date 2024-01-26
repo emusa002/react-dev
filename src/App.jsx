@@ -1,8 +1,10 @@
 import { useState } from 'react';
 
+// Renders a single square on the board, which displays its current value ('X', 'O', or null)
+// and triggers onSquareClick when clicked.
 function Square({ value, onSquareClick }) {
-  // Renders a single square on the board, which displays its current value ('X', 'O', or null)
-  // and triggers onSquareClick when clicked.
+  // value: The current value of the square ('X', 'O', or null) in the tic-tac-toe game.
+  // onSquareClick: A callback function to handle the click event on the square.
   return (
     <button className="square" onClick={onSquareClick}>
       {value}
@@ -10,10 +12,19 @@ function Square({ value, onSquareClick }) {
   );
 }
 
+/* The Board component is responsible for rendering the tic-tac-toe game board. It maps the 
+'squares' array to Square components, passing the value and a click handler to each. It also 
+calculates and displays the game status (current player or winner).
+*/
 function Board({ xIsNext, squares, onPlay }) {
+  // xIsNext: A boolean value indicating if it's player 'X's turn (true) or player 'O's turn (false).
+  // squares: An array of 9 elements representing the current state of the tic-tac-toe board.
+  // onPlay: A callback function that updates the game state when a player makes a move.
+
   // Handles click events for each square. It checks for a winner or if the square is already filled.
   // If not, it updates the square's value based on the current player.
   function handleClick(i) {
+    // i: The index of the square that was clicked. Used to update the corresponding element in the 'squares' array.
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
@@ -54,8 +65,8 @@ function Board({ xIsNext, squares, onPlay }) {
   );
 }
 
+// Manages the game state: history of moves and the current move index.
 export default function Game() {
-  // Manages the game state: history of moves and the current move index.
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
 
@@ -65,6 +76,8 @@ export default function Game() {
 
   // Updates the game history and current move when a new play is made.
   function handlePlay(nextSquares) {
+    // nextSquares: An array representing the new state of the board after the current move.
+
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
@@ -72,6 +85,7 @@ export default function Game() {
 
   // Allows jumping to a previous move in the history.
   function jumpTo(nextMove) {
+    // nextMove: The move number in the game history to which the game state should revert.
     setCurrentMove(nextMove);
   }
 
@@ -98,9 +112,10 @@ export default function Game() {
   );
 }
 
+// Defines all possible winning lines on the board and checks if any have been met.
+// Returns the winner ('X' or 'O') or null if there's no winner yet.
 function calculateWinner(squares) {
-  // Defines all possible winning lines on the board and checks if any have been met.
-  // Returns the winner ('X' or 'O') or null if there's no winner yet.
+  // squares: An array of 9 elements representing the current state of the tic-tac-toe board.
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
